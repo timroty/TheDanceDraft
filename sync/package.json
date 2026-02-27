@@ -1,0 +1,15 @@
+{
+  "name": "thedancedraft-sync",
+  "version": "1.0.0",
+  "description": "ESPN scoreboard sync service for TheDanceDraft",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.1",
+    "node-cron": "^3.0.3",
+    "node-fetch": "^3.3.2"
+  }
+}

@@ -1,1 +1,3 @@
 # TheDanceDraft
+
+The Dance Draft is a spin on March Madness brackets. In this game, a team gets a certain number of points per win, with higher seeds getting more. Your goal is to draft a set of teams that will garner you the most points! Is it better to draft low seeds that will get lots of wins but only a few points from each? Or cinderella teams that could hit you the jackpot, the choice is yours!
