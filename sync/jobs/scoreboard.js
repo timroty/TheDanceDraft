@@ -34,6 +34,7 @@ async function processCompetition(comp) {
 
   const dbHomeEspnId = await getTeamEspnId(home_team_id);
   if (dbHomeEspnId !== comp.homeTeamEspnId) {
+    console.log(`[scoreboard] Detected home/away mismatch for game ${game.id} (ESPN game ${comp.espnGameId}). Swapping teams and scores.`);
     // Swap IDs and scores to align with ESPN ordering.
     [home_team_id, away_team_id] = [away_team_id, home_team_id];
     [homeScore, awayScore] = [awayScore, homeScore];
@@ -59,7 +60,7 @@ async function processCompetition(comp) {
   }
 
   // Step 5: Advance bracket for newly finished, unprocessed games.
-  if (comp.statusId === 3 && !game.processed) {
+  if (!game.processed) {
     await advanceBracket(game, homeScore, awayScore, home_team_id, away_team_id);
   }
 }
@@ -69,7 +70,7 @@ async function findGameByEspnId(espnGameId) {
     .from('game')
     .select('*')
     .eq('espn_game_id', espnGameId)
-    .neq('status', 3)
+    .neq('processed', true)
     .maybeSingle();
 
   if (error) {
@@ -106,7 +107,7 @@ async function findGameByTeamEspnIds(homeTeamEspnId, awayTeamEspnId) {
     .select('*')
     .in('home_team_id', ttIds)
     .in('away_team_id', ttIds)
-    .neq('status', 3);
+    .neq('processed', true);
 
   if (gameError || !games || games.length === 0) return null;
 

@@ -20,11 +20,15 @@ The frontend reads game data directly from the database. This service is the onl
 ```
 sync/
   index.js              # Registers all cron jobs
+  scripts/
+    seed-tournament.js  # One-off script: seeds teams, tournament_team, and game slots from ESPN bracket JSON
   jobs/
     scoreboard.js       # Combined poll + update + bracket-advance job
   lib/
     db.js               # Supabase client singleton
     espn.js             # ESPN API fetch + response parsing
+  ingest-data/
+    2025Bracket.json    # ESPN bracket JSON used as input for seed-tournament.js
   .env.example          # Environment variable reference
   Dockerfile
 ```
@@ -36,6 +40,8 @@ Default: `0 */2 * * * *` (every 2 minutes, on the second). Override with the `SY
 ### ESPN API
 
 Endpoint: `https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard`
+
+The parameter `?dates=` can be appended to query on a specific date. The date format is YYYYMMDD. For example, February 27, 2026 would be `?dates=20260227`.
 
 Key fields consumed per event:
 - `event.id` → matched against `game.espn_game_id`
@@ -74,6 +80,37 @@ After updating scores, the service checks for games that just became `status = 3
 | `SUPABASE_URL` | Yes | Your Supabase project URL |
 | `SUPABASE_SECRET_KEY` | Yes | Service role key (bypasses RLS for writes) |
 | `SYNC_CRON` | No | Cron schedule (default: `0 */2 * * * *`) |
+
+## One-Off Scripts
+
+### `seed-tournament.js`
+
+Seeds the database from an ESPN bracket JSON file before the tournament begins. Run this once per season after the bracket is announced. It does not run as part of the cron service.
+
+**Prerequisites:**
+
+- The `tournament` row for the target year must already exist in the DB.
+- The 63 `game` rows for that tournament must already exist (slots 1–63).
+- `.env` must be populated with `SUPABASE_URL` and `SUPABASE_SECRET_KEY`.
+
+**Setup:**
+
+Open `seed-tournament.js` and set `TOURNAMENT_ID` at the top of the file to the UUID of the target tournament row.
+
+**Run:**
+
+```sh
+cd sync
+npm run seed
+```
+
+**What it does (in order):**
+
+1. **Seed teams** — inserts any competitor from round 1 matchups that doesn't already exist in the `team` table (matched by `espn_id`).
+2. **Seed tournament_team** — inserts a `tournament_team` row for each round 1 team, recording their seed number.
+3. **Seed games** — for each round 1 matchup, fills the `home_team_id`, `away_team_id`, and `espn_game_id` columns on the pre-existing `game` row. Slot mapping: `slot = bracketLocation + 31`.
+
+All three phases are idempotent — already-existing rows are skipped, not overwritten.
 
 ## Building and Running
 
