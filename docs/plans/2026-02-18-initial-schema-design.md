@@ -55,7 +55,7 @@ Teams are tournament-agnostic. Duke is always the same row regardless of tournam
 ```
 supabase/
   migrations/
-    20260218000000_initial_schema.sql
+    20260218000000_initial_team_schema.sql
 ```
 
 All three tables in a single migration file.

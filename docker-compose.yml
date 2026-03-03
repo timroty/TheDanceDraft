@@ -1,0 +1,28 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      # Mount source for live reload
+      - ./frontend:/app
+      # Anonymous volumes prevent host from overwriting container's installed packages
+      - /app/node_modules
+      - /app/.next
+    environment:
+      # Use polling instead of native fs events — required for hot reload on macOS/Windows
+      - WATCHPACK_POLLING=true
+      - NODE_ENV=development
+    env_file:
+      - ./frontend/.env.local
+    restart: unless-stopped
+
+  syncservice:
+    build:
+      context: ./sync
+      dockerfile: Dockerfile
+    env_file:
+      - ./sync/.env
+    restart: unless-stopped
