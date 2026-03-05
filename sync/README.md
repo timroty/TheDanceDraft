@@ -79,7 +79,7 @@ After updating scores, the service checks for games that just became `status = 3
 |---|---|---|
 | `SUPABASE_URL` | Yes | Your Supabase project URL |
 | `SUPABASE_SECRET_KEY` | Yes | Service role key (bypasses RLS for writes) |
-| `SYNC_CRON` | No | Cron schedule (default: `0 */2 * * * *`) |
+| `SYNC_CRON` | No | Cron schedule |
 
 ## One-Off Scripts
 
