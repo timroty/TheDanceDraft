@@ -3,7 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { createClient } from "@/lib/supabase/client";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 
 type Team = {
@@ -38,7 +38,6 @@ export function TeamAssignment({
   const [assignments, setAssignments] = useState<Assignment[]>(initialAssignments);
   const [searchTerms, setSearchTerms] = useState<Record<string, string>>({});
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-  const inputRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
   const assignedTeamIds = new Set(assignments.map((a) => a.tournament_team_id));
   const unassignedTeams = teams.filter((t) => !assignedTeamIds.has(t.tournament_team_id));
@@ -158,7 +157,6 @@ export function TeamAssignment({
               </div>
               <div className="relative max-w-xs">
                 <Input
-                  ref={(el) => { inputRefs.current[player.id] = el; }}
                   placeholder="Search teams..."
                   value={searchTerms[player.id] ?? ""}
                   onChange={(e) => {

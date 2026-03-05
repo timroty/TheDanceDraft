@@ -6,7 +6,7 @@ SELECT tt.id AS tournament_team_id,
   FROM tournament_team tt
     LEFT JOIN game g ON (g.home_team_id = tt.id OR g.away_team_id = tt.id) 
     AND g.status = 3 
-    AND (g.home_team_id = tt.id AND g.home_score > g.away_score OR g.away_team_id = tt.id AND g.away_score > g.home_score)
+    AND ((g.home_team_id = tt.id AND g.home_score > g.away_score) OR (g.away_team_id = tt.id AND g.away_score > g.home_score))
 GROUP BY tt.id;
 
 -- Aggregates wins and scores per player for a league season
@@ -21,6 +21,5 @@ SELECT lsp.league_season_id,
     JOIN league_player lp ON lp.id = lsp.league_player_id
     JOIN tournament_team tt ON tt.id = lsp.tournament_team_id
     LEFT JOIN tournament_team_wins ttw ON ttw.tournament_team_id = tt.id
-    LEFT JOIN league_season ls ON ls.id = lsp.league_season_id
-    LEFT JOIN league_season_scoring lss ON lss.league_season_id = ls.id AND lss.seed = tt.seed
+    LEFT JOIN league_season_scoring lss ON lss.league_season_id = lsp.league_season_id AND lss.seed = tt.seed
 GROUP BY lsp.league_season_id, lp.id, lp.name, lp.profile_pic;

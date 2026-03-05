@@ -8,7 +8,7 @@ export async function fetchBracketData(
   const supabase = await createClient();
 
   // Fetch all 63 games for this tournament
-  const { data: games } = await supabase
+  const { data: games, error: gamesError } = await supabase
     .from("game")
     .select(
       `
@@ -18,18 +18,21 @@ export async function fetchBracketData(
     )
     .eq("tournament_id", tournamentId)
     .order("slot");
+  if (gamesError) console.error("Error fetching games:", gamesError);
 
   // Fetch tournament teams with team names
-  const { data: tournamentTeams } = await supabase
+  const { data: tournamentTeams, error: teamsError } = await supabase
     .from("tournament_team")
     .select("id, seed, team(name, logo_url)")
     .eq("tournament_id", tournamentId);
+  if (teamsError) console.error("Error fetching tournament teams:", teamsError);
 
   // Fetch player assignments for this league season
-  const { data: playerAssignments } = await supabase
+  const { data: playerAssignments, error: assignmentsError } = await supabase
     .from("league_season_player")
     .select("tournament_team_id, league_player(name, profile_pic)")
     .eq("league_season_id", leagueSeasonId);
+  if (assignmentsError) console.error("Error fetching player assignments:", assignmentsError);
 
   // Build lookup maps
   const teamMap = new Map<

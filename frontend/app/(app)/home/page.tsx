@@ -18,9 +18,9 @@ async function HomeContent() {
   const { data: playerLeagues } = await supabase
     .from("league_player")
     .select("user_id, league (id, name)")
-    .or(`user_id.eq.${user!.id}`);
+    .eq("user_id", user!.id);
 
-  const leagues = playerLeagues?.flatMap((pl) => pl.league) || [];
+  const leagues = playerLeagues?.flatMap((pl) => pl.league) ?? [];
 
   return (
     <div className="flex flex-col gap-6">

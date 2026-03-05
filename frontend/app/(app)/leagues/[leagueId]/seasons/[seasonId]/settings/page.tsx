@@ -26,7 +26,7 @@ async function SettingsContent({
     .eq("id", leagueId)
     .single();
 
-  if (league?.commissioner_id !== user?.id) {
+  if (!league || league.commissioner_id !== user?.id) {
     redirect(`/leagues/${leagueId}/seasons/${seasonId}`);
   }
 
@@ -37,11 +37,15 @@ async function SettingsContent({
     .eq("id", seasonId)
     .single();
 
+  if (!season) {
+    redirect(`/leagues/${leagueId}`);
+  }
+
   // Fetch tournament teams with team names
   const { data: tournamentTeams } = await supabase
     .from("tournament_team")
     .select("id, seed, team( name )")
-    .eq("tournament_id", season!.tournament_id)
+    .eq("tournament_id", season.tournament_id)
     .order("seed");
 
   // Fetch active league players

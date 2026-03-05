@@ -38,7 +38,7 @@ async function SeasonContent({
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">{leagueName}</h1>
-          <h2 className="text-xl">{year}</h2>
+          <h2 className="text-lg text-muted-foreground">{year}</h2>
         </div>
         {isCommissioner && (
           <Button asChild variant="ghost" size="icon">
