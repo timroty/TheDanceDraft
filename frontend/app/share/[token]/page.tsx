@@ -1,3 +1,5 @@
+import { Bracket } from "@/components/bracket";
+import { ScoreTable } from "@/components/score-table";
 import { createClient } from "@/lib/supabase/server";
 import { Suspense } from "react";
 
@@ -11,18 +13,9 @@ async function ShareContent({
 
   const { data: leagueSeason, error } = await supabase
     .from("league_season")
-    .select("id, league(name), tournament(year)")
+    .select("id, tournament_id, league(name), tournament(year)")
     .eq("share_token", token)
     .single();
-
-  if (error && error.code !== "PGRST116") {
-    return (
-      <div className="flex flex-col items-center gap-4 text-center">
-        <h1 className="text-2xl font-bold">Something went wrong</h1>
-        <p className="text-muted-foreground">Please try again later.</p>
-      </div>
-    );
-  }
 
   if (!leagueSeason) {
     return (
@@ -37,10 +30,21 @@ async function ShareContent({
 
   return (
     <div className="flex flex-col gap-1">
-      <h1 className="text-2xl font-bold">{leagueSeason.league.name}</h1>
+      <h1 className="text-2xl font-bold">
+        {(leagueSeason.league as unknown as { name: string })?.name}
+      </h1>
       <p className="text-sm text-muted-foreground">
-        {leagueSeason.tournament.year}
+        {(leagueSeason.tournament as unknown as { year: number })?.year}
       </p>
+      <div className="mt-6">
+        <ScoreTable leagueSeasonId={leagueSeason.id} />
+      </div>
+      {leagueSeason?.tournament_id && (
+        <Bracket
+          leagueSeasonId={leagueSeason.id}
+          tournamentId={leagueSeason.tournament_id}
+        />
+      )}
     </div>
   );
 }
