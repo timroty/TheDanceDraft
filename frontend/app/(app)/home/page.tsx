@@ -15,12 +15,12 @@ async function HomeContent() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const { data: players_leagues } = await supabase
+  const { data: playerLeagues } = await supabase
     .from("league_player")
     .select("user_id, league (id, name)")
     .or(`user_id.eq.${user!.id}`);
 
-  const leagues = players_leagues?.flatMap((pl) => pl.league) || [];
+  const leagues = playerLeagues?.flatMap((pl) => pl.league) || [];
 
   return (
     <div className="flex flex-col gap-6">
