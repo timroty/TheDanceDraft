@@ -22,7 +22,8 @@ export default function AppLayout({
             </Suspense>
           </div>
         </nav>
-        <div className="flex-1 flex flex-col gap-20 max-w-7xl mx-auto p-5">
+
+        <div className="flex-1 flex flex-col gap-20 max-w-7xl mx-auto p-5 w-full">
           {children}
         </div>
 

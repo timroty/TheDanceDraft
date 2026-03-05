@@ -11,7 +11,7 @@ async function ShareContent({
   const { token } = await params;
   const supabase = await createClient();
 
-  const { data: leagueSeason, error } = await supabase
+  const { data: leagueSeason } = await supabase
     .from("league_season")
     .select("id, tournament_id, league(name), tournament(year)")
     .eq("share_token", token)

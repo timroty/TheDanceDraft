@@ -20,14 +20,14 @@ async function SeasonContent({
 
   const { data: season } = await supabase
     .from("league_season")
-    .select("id, tournament_id, tournament(year), league(commissioner_id)")
+    .select("id, tournament_id, tournament(year), league(commissioner_id, name)")
     .eq("id", seasonId)
     .single();
 
+  const leagueName =
+    (season?.league as unknown as { name: string })?.name ?? "League";
   const year =
     (season?.tournament as unknown as { year: number })?.year ?? "Season";
-  // const leagueName =
-  //   (season?.league as unknown as { name: string })?.name ?? "League";
   const commissionerId = (
     season?.league as unknown as { commissioner_id: string }
   )?.commissioner_id;
@@ -37,7 +37,7 @@ async function SeasonContent({
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
-          {/* <h1 className="text-2xl font-bold">{leagueName}</h1> */}
+          <h1 className="text-2xl font-bold">{leagueName}</h1>
           <h2 className="text-xl">{year}</h2>
         </div>
         {isCommissioner && (
@@ -48,7 +48,9 @@ async function SeasonContent({
           </Button>
         )}
       </div>
-      <ScoreTable leagueSeasonId={seasonId} />
+      <div className="ml-1">
+        <ScoreTable leagueSeasonId={seasonId} />
+      </div>
       {season?.tournament_id && (
         <Bracket leagueSeasonId={seasonId} tournamentId={season.tournament_id} />
       )}
