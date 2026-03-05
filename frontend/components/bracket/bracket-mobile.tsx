@@ -1,6 +1,10 @@
+"use client";
+
+import { useRef } from "react";
 import type { BracketData, GameData } from "./types";
 import { GameCard } from "./game-card";
 import { ROUND_NAMES } from "./types";
+import { ScrollIndicator } from "./scroll-indicator";
 
 function groupByRegion(games: GameData[]): Record<string, GameData[]> {
   const groups: Record<string, GameData[]> = {};
@@ -46,6 +50,7 @@ function RoundColumn({
 }
 
 export function BracketMobile({ bracket }: { bracket: BracketData }) {
+  const containerRef = useRef<HTMLDivElement>(null);
   const gamesByRound: Record<number, GameData[]> = {};
   for (const game of Object.values(bracket)) {
     if (!gamesByRound[game.round]) gamesByRound[game.round] = [];
@@ -59,14 +64,17 @@ export function BracketMobile({ bracket }: { bracket: BracketData }) {
   const rounds = [1, 2, 3, 4, 5, 6];
 
   return (
-    <div className="overflow-x-auto snap-x snap-mandatory flex w-full">
-      {rounds.map((round) => (
-        <RoundColumn
-          key={round}
-          round={round}
-          games={gamesByRound[round] ?? []}
-        />
-      ))}
+    <div>
+      <ScrollIndicator containerRef={containerRef} count={rounds.length} />
+      <div ref={containerRef} className="overflow-x-auto snap-x snap-mandatory flex w-full">
+        {rounds.map((round) => (
+          <RoundColumn
+            key={round}
+            round={round}
+            games={gamesByRound[round] ?? []}
+          />
+        ))}
+      </div>
     </div>
   );
 }
