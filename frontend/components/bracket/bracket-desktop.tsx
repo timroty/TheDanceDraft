@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import type { BracketData } from "./types";
 import { GameCard } from "./game-card";
 
@@ -72,10 +73,15 @@ function Region({
 
   return (
     <div className="flex flex-col gap-1">
-      <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide px-1">
+      <div
+        className={cn(
+          "text-xs font-semibold text-muted-foreground uppercase tracking-wide px-1",
+          region.side === "right" && "text-right",
+        )}
+      >
         {regionName}
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-6">
         {rounds.map((slots, i) => {
           const roundIndex =
             region.side === "left" ? i : rounds.length - 1 - i;
@@ -117,13 +123,22 @@ export function BracketDesktop({ bracket }: { bracket: BracketData }) {
 
         {/* Center: Final Four + Championship */}
         <div className="flex flex-col items-center gap-4">
+          <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+            Final Four
+          </div>
           <FinalFourCard bracket={bracket} slot={2} />
+          <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mt-2">
+            Championship
+          </div>
           <FinalFourCard bracket={bracket} slot={1} />
+          <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mt-2">
+            Final Four
+          </div>
           <FinalFourCard bracket={bracket} slot={3} />
         </div>
 
         {/* Right side: regions C and D */}
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-8 items-end">
           <Region region={REGIONS[2]} bracket={bracket} />
           <Region region={REGIONS[3]} bracket={bracket} />
         </div>
