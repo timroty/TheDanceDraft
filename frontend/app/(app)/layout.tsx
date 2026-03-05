@@ -3,11 +3,12 @@ import { ThemeSwitcher } from "@/components/theme-switcher";
 import Link from "next/link";
 import { Suspense } from "react";
 
-export default function ProtectedLayout({
+export default function AppLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // Auth guard is handled by middleware (proxy.ts)
   return (
     <main className="min-h-screen flex flex-col items-center">
       <div className="flex-1 w-full flex flex-col gap-20 items-center">

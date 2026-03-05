@@ -59,11 +59,11 @@ function isTeamWinner(game: GameData, team: "home" | "away"): boolean {
   return game.awayTeam.score > game.homeTeam.score;
 }
 
-export function GameCard({ game }: { game: GameData }) {
+export function GameCard({ game, className }: { game: GameData; className?: string }) {
   const showScore = game.status >= 2;
 
   return (
-    <div className="w-44 rounded border border-border bg-card text-card-foreground shadow-sm">
+    <div className={cn("rounded border border-border bg-card text-card-foreground shadow-sm", className ?? "w-44")}>
       <TeamRow
         team={game.homeTeam}
         isWinner={isTeamWinner(game, "home")}

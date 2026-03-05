@@ -23,7 +23,7 @@ function RoundColumn({
   const showRegionHeaders = round <= 4;
 
   return (
-    <div className="w-screen flex-shrink-0 snap-start px-4 py-2 overflow-y-auto">
+    <div className="w-full min-w-full flex-shrink-0 snap-start px-4 py-2 overflow-y-auto">
       <div className="sticky top-0 bg-background/95 backdrop-blur-sm pb-2 mb-2 border-b border-border z-10">
         <h3 className="text-sm font-semibold">{ROUND_NAMES[round]}</h3>
       </div>
@@ -36,9 +36,7 @@ function RoundColumn({
               </div>
             )}
             {regionGames.map((game) => (
-              <div key={game.slot} className="w-full max-w-sm">
-                <GameCard game={game} />
-              </div>
+              <GameCard key={game.slot} game={game} className="w-full" />
             ))}
           </div>
         ))}

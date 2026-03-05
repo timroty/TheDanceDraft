@@ -57,6 +57,49 @@ function RegionColumn({
   );
 }
 
+function ConnectorColumn({
+  count,
+  side,
+  targetRoundIndex,
+}: {
+  count: number;
+  side: "left" | "right";
+  targetRoundIndex: number;
+}) {
+  // Match the gap of the target round column so connector units align
+  return (
+    <div
+      className="flex flex-col justify-around"
+      style={{ gap: `${Math.pow(2, targetRoundIndex) * 0.5}rem` }}
+    >
+      {Array.from({ length: count }).map((_, i) => (
+        <div key={i} className="flex items-center">
+          {side === "right" && (
+            <div className="w-2 border-t border-border" />
+          )}
+          <div className="flex flex-col w-4">
+            <div
+              className={cn(
+                "h-6 border-border",
+                side === "left" ? "border-r border-b" : "border-l border-b",
+              )}
+            />
+            <div
+              className={cn(
+                "h-6 border-border",
+                side === "left" ? "border-r border-t" : "border-l border-t",
+              )}
+            />
+          </div>
+          {side === "left" && (
+            <div className="w-2 border-t border-border" />
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function Region({
   region,
   bracket,
@@ -71,6 +114,35 @@ function Region({
 
   const regionName = bracket[region.r64[0]]?.region ?? "";
 
+  // Build interleaved array of round columns and connector columns
+  const elements: React.ReactNode[] = [];
+  for (let i = 0; i < rounds.length; i++) {
+    const roundIndex =
+      region.side === "left" ? i : rounds.length - 1 - i;
+    elements.push(
+      <RegionColumn
+        key={`r${i}`}
+        slots={rounds[i]}
+        bracket={bracket}
+        roundIndex={roundIndex}
+      />,
+    );
+    if (i < rounds.length - 1) {
+      const connectorCount = Math.min(rounds[i].length, rounds[i + 1].length);
+      // Target round index = the round with fewer games (the one being merged into)
+      const targetRoundIndex =
+        region.side === "left" ? i + 1 : rounds.length - 2 - i;
+      elements.push(
+        <ConnectorColumn
+          key={`c${i}`}
+          count={connectorCount}
+          side={region.side}
+          targetRoundIndex={targetRoundIndex}
+        />,
+      );
+    }
+  }
+
   return (
     <div className="flex flex-col gap-1">
       <div
@@ -81,19 +153,8 @@ function Region({
       >
         {regionName}
       </div>
-      <div className="flex items-center gap-6">
-        {rounds.map((slots, i) => {
-          const roundIndex =
-            region.side === "left" ? i : rounds.length - 1 - i;
-          return (
-            <RegionColumn
-              key={i}
-              slots={slots}
-              bracket={bracket}
-              roundIndex={roundIndex}
-            />
-          );
-        })}
+      <div className="flex items-stretch gap-1">
+        {elements}
       </div>
     </div>
   );
