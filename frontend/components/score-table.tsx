@@ -57,7 +57,9 @@ export async function ScoreTable({
                       className="size-6 rounded-full object-cover"
                     />
                   ) : (
-                    <div className="size-6 rounded-full bg-muted" />
+                    <div className="size-6 rounded-full bg-muted flex items-center justify-center text-[10px] font-medium">
+                      {row.player_name.charAt(0).toUpperCase()}
+                    </div>
                   )}
                   <span className="font-medium">{row.player_name}</span>
                 </div>

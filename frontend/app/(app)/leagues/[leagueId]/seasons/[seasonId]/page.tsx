@@ -2,6 +2,7 @@ import { Bracket } from "@/components/bracket";
 import { ScoreTable } from "@/components/score-table";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
+import { Settings } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 
@@ -25,6 +26,8 @@ async function SeasonContent({
 
   const year =
     (season?.tournament as unknown as { year: number })?.year ?? "Season";
+  // const leagueName =
+  //   (season?.league as unknown as { name: string })?.name ?? "League";
   const commissionerId = (
     season?.league as unknown as { commissioner_id: string }
   )?.commissioner_id;
@@ -33,11 +36,14 @@ async function SeasonContent({
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">{year}</h1>
+        <div>
+          {/* <h1 className="text-2xl font-bold">{leagueName}</h1> */}
+          <h2 className="text-xl">{year}</h2>
+        </div>
         {isCommissioner && (
-          <Button asChild variant="outline">
+          <Button asChild variant="ghost" size="icon">
             <Link href={`/leagues/${leagueId}/seasons/${seasonId}/settings`}>
-              Settings
+              <Settings className="size-4" />
             </Link>
           </Button>
         )}
