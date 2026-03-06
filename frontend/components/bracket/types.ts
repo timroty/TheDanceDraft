@@ -6,6 +6,7 @@ export type TeamInGame = {
   score: number | null;
   playerName: string | null;
   playerProfilePic: string | null;
+  pointsPerWin: number | null;
 };
 
 export type GameData = {
