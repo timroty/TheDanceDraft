@@ -67,6 +67,7 @@ function ConnectorColumn({
   targetRoundIndex: number;
 }) {
   // Match the gap of the target round column so connector units align
+  const height = Math.pow(2, targetRoundIndex) * 1.5;
   return (
     <div
       className="flex flex-col justify-around"
@@ -80,15 +81,17 @@ function ConnectorColumn({
           <div className="flex flex-col w-4">
             <div
               className={cn(
-                "h-6 border-border",
-                side === "left" ? "border-r border-b" : "border-l border-b",
+                `border-border`,
+                side === "left" ? "border-r border-t" : "border-l border-t",
               )}
+              style={{height: `${height}rem` }}
             />
             <div
               className={cn(
-                "h-6 border-border",
-                side === "left" ? "border-r border-t" : "border-l border-t",
+                `border-border`,
+                side === "left" ? "border-r border-b" : "border-l border-b",
               )}
+              style={{height: `${height}rem` }}
             />
           </div>
           {side === "left" && (
@@ -131,7 +134,7 @@ function Region({
       const connectorCount = Math.min(rounds[i].length, rounds[i + 1].length);
       // Target round index = the round with fewer games (the one being merged into)
       const targetRoundIndex =
-        region.side === "left" ? i + 1 : rounds.length - 2 - i;
+        region.side === "left" ? i + 1 : rounds.length - 1 - i;
       elements.push(
         <ConnectorColumn
           key={`c${i}`}
