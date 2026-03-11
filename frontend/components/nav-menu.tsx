@@ -33,6 +33,7 @@ export function NavMenu({ isAuthenticated }: NavMenuProps) {
   const logout = async () => {
     const supabase = createClient();
     await supabase.auth.signOut();
+    router.refresh();
     router.push("/auth/login");
   };
 

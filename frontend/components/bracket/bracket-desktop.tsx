@@ -50,7 +50,7 @@ function RegionColumn({
     >
       {slots.map((slot) => {
         const game = bracket[slot];
-        if (!game) return <div key={slot} className="w-44 h-16" />;
+        if (!game) return <div key={slot} className="w-52 h-16" />;
         return <GameCard key={slot} game={game} />;
       })}
     </div>
@@ -170,7 +170,7 @@ function FinalFourCard({
   slot: number;
 }) {
   const game = bracket[slot];
-  if (!game) return <div className="w-44 h-16" />;
+  if (!game) return <div className="w-52 h-16" />;
   return <GameCard game={game} />;
 }
 
