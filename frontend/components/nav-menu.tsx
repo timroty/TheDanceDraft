@@ -46,7 +46,7 @@ export function NavMenu({ isAuthenticated }: NavMenuProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm">
+        <Button variant="ghost" size="sm" aria-label="Open navigation menu">
           <Menu size={18} />
         </Button>
       </DropdownMenuTrigger>
