@@ -62,7 +62,7 @@ function TeamRow({
           <span className="truncate">
             ({team.seed}) {team.teamName}
           </span>
-          {showPoints && team.pointsPerWin != null && (
+          {showPoints && team.pointsPerWin != null && team.playerName != null && (
             <span className="shrink-0 tabular-nums">
               +{team.pointsPerWin} pts
             </span>

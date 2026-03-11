@@ -67,11 +67,10 @@ function ConnectorColumn({
   targetRoundIndex: number;
 }) {
   // Match the gap of the target round column so connector units align
-  const height = Math.pow(2, targetRoundIndex) * 1.75;
+  const height = Math.pow(2, targetRoundIndex) * 1.85;
   return (
     <div
       className="flex flex-col justify-around"
-      style={{ gap: `${Math.pow(2, targetRoundIndex) * 1.1}rem` }}
     >
       {Array.from({ length: count }).map((_, i) => (
         <div key={i} className="flex items-center">

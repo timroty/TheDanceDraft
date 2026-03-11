@@ -13,6 +13,7 @@ import { Menu, Sun, Moon, Laptop } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 interface NavMenuProps {
   isAuthenticated: boolean;
@@ -21,6 +22,11 @@ interface NavMenuProps {
 export function NavMenu({ isAuthenticated }: NavMenuProps) {
   const router = useRouter();
   const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const cycleTheme = () => {
     if (theme === "light") setTheme("dark");
@@ -28,7 +34,7 @@ export function NavMenu({ isAuthenticated }: NavMenuProps) {
     else setTheme("light");
   };
 
-  const ThemeIcon = theme === "light" ? Sun : theme === "dark" ? Moon : Laptop;
+  const ThemeIcon = !mounted ? Laptop : theme === "light" ? Sun : theme === "dark" ? Moon : Laptop;
 
   const logout = async () => {
     const supabase = createClient();
@@ -52,11 +58,13 @@ export function NavMenu({ isAuthenticated }: NavMenuProps) {
           >
             <ThemeIcon size={16} className="text-muted-foreground" />
             <span>
-              {theme === "light"
-                ? "Light"
-                : theme === "dark"
-                  ? "Dark"
-                  : "System"}
+              {!mounted
+                ? "System"
+                : theme === "light"
+                  ? "Light"
+                  : theme === "dark"
+                    ? "Dark"
+                    : "System"}
             </span>
           </button>
         </DropdownMenuItem>
