@@ -34,6 +34,13 @@ export async function fetchBracketData(
     .eq("league_season_id", leagueSeasonId);
   if (assignmentsError) console.error("Error fetching player assignments:", assignmentsError);
 
+  // Fetch points-per-win scoring config for this league season
+  const { data: scoringRows, error: scoringError } = await supabase
+    .from("league_season_scoring")
+    .select("seed, points")
+    .eq("league_season_id", leagueSeasonId);
+  if (scoringError) console.error("Error fetching scoring:", scoringError);
+
   // Build lookup maps
   const teamMap = new Map<
     string,
@@ -66,6 +73,11 @@ export async function fetchBracketData(
     });
   }
 
+  const scoringMap = new Map<number, number>();
+  for (const row of scoringRows ?? []) {
+    scoringMap.set(row.seed, row.points);
+  }
+
   function buildTeam(
     teamId: string | null,
     score: number | null,
@@ -82,6 +94,7 @@ export async function fetchBracketData(
       score,
       playerName: player?.name ?? null,
       playerProfilePic: player?.profilePic ?? null,
+      pointsPerWin: scoringMap.get(team.seed) ?? null,
     };
   }
 
