@@ -74,6 +74,9 @@ async function seedGames(matchups) {
     const updateObj = { espn_game_id: matchup.id };
 
     for (const competitor of [matchup.competitorOne, matchup.competitorTwo]) {
+      if (!competitor.id || competitor.id === "0") 
+        continue;
+
       const col = competitor.homeAway === 'home' ? 'home_team_id' : 'away_team_id';
       if (gameRow[col] !== null) continue;
 
@@ -101,7 +104,7 @@ async function main() {
   const raw = readFileSync(JSON_PATH, 'utf-8');
   const data = JSON.parse(raw);
   const matchups = data.matchups;
-  const competitors = getAllRound1Competitors(matchups);
+  const competitors = getAllRound1Competitors(matchups).filter(c => c.id !== "0");
 
   console.log('[seed] Starting tournament seed...');
   console.log(`[seed] Tournament ID: ${TOURNAMENT_ID}`);
