@@ -59,11 +59,11 @@ export function TeamList({
   });
 
   return (
-    <Card>
+    <Card className="max-w-xl border-none">
       <CardHeader>
         <CardTitle className="text-lg">Teams</CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-col gap-4">
+      <CardContent className="flex flex-col gap-4 max-h-96 overflow-y-auto">
         {/* Player filter badges */}
         <div className="flex flex-wrap gap-2">
           <Badge

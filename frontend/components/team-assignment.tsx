@@ -138,9 +138,9 @@ export function TeamAssignment({
           const isOpen = openDropdown === player.id && filtered.length > 0;
 
           return (
-            <div key={player.id} className="flex flex-col gap-2 pb-4 border-b border-muted last:border-b-0">
-              <div className="text-sm font-medium text-muted-foreground">{player.name}</div>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <div key={player.id} className="flex flex-col gap-2">
+              <div className="font-medium">{player.name}</div>
+              <div className="flex flex-wrap gap-2">
                 {playerTeams.map(({ team, ...assignment }) => (
                   <Badge key={assignment.league_season_player_id}>
                     ({team.seed}) {team.team_name}
