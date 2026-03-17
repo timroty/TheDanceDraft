@@ -67,7 +67,7 @@ export default function SharePage({
   params: Promise<{ token: string }>;
 }) {
   return (
-    <main className="min-h-screen p-8">
+    <main className="min-h-screen p-5">
       <Suspense>
         <ShareContent params={params} />
       </Suspense>

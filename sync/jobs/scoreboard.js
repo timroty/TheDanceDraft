@@ -37,7 +37,6 @@ async function processCompetition(comp) {
     console.log(`[scoreboard] Detected home/away mismatch for game ${game.id} (ESPN game ${comp.espnGameId}). Swapping teams and scores.`);
     // Swap IDs and scores to align with ESPN ordering.
     [home_team_id, away_team_id] = [away_team_id, home_team_id];
-    [homeScore, awayScore] = [awayScore, homeScore];
   }
 
   // Step 4: Update the game row.
