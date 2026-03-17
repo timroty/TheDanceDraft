@@ -1,5 +1,6 @@
 import { Bracket } from "@/components/bracket";
 import { ScoreTable } from "@/components/score-table";
+import { TeamList } from "@/components/team-list";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
 import { ArrowLeft, Settings } from "lucide-react";
@@ -114,8 +115,11 @@ async function SeasonContent({
           </Link>
         </Button>
       </div>
-      <div className="ml-1">
-        <ScoreTable leagueSeasonId={seasonId} />
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr] gap-6">
+        <div className="ml-1">
+          <ScoreTable leagueSeasonId={seasonId} />
+        </div>
+        <TeamList teams={teamListData} players={playersForFilter} />
       </div>
       {season?.tournament_id && (
         <Bracket leagueSeasonId={seasonId} tournamentId={season.tournament_id} />
