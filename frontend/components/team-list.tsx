@@ -64,7 +64,7 @@ export function TeamList({
       <CardHeader>
         <CardTitle className="text-lg">Teams</CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-col gap-4 max-h-80 overflow-y-auto">
+      <CardContent className="flex flex-col gap-4 max-h-96 overflow-y-auto">
         {/* Player filter badges */}
         <div className="flex flex-wrap gap-2">
           <Badge
