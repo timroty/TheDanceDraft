@@ -71,6 +71,7 @@ async function SeasonContent({
       tournament_team_id: tt.id,
       team_name: (tt.team as unknown as { name: string })?.name ?? "Unknown",
       seed: tt.seed,
+      wins,
       total_points: wins * pointsPerWin,
       player_name: player?.name ?? null,
       player_id: player?.id ?? null,

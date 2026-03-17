@@ -8,6 +8,7 @@ type TeamData = {
   tournament_team_id: string;
   team_name: string;
   seed: number;
+  wins: number;
   total_points: number;
   player_name: string | null;
   player_id: string | null;
@@ -91,6 +92,7 @@ export function TeamList({
             <tr className="text-left text-sm text-muted-foreground">
               <th className="pb-2">Team</th>
               <th className="pb-2 w-16 text-center">Seed</th>
+              <th className="pb-2 w-16 text-center">Wins</th>
               <th className="pb-2 w-20 text-right">Points</th>
               <th className="pb-2 text-right">Player</th>
             </tr>
@@ -103,6 +105,7 @@ export function TeamList({
               >
                 <td className="py-2 font-medium">{team.team_name}</td>
                 <td className="py-2 text-center tabular-nums">{team.seed}</td>
+                <td className="py-2 text-center tabular-nums">{team.wins}</td>
                 <td className="py-2 text-right tabular-nums">
                   {team.total_points}
                 </td>
