@@ -88,14 +88,13 @@ export function TeamList({
 
         {/* Team list table */}
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[360px]">
+          <table className="w-auto">
             <thead>
               <tr className="text-left text-sm text-muted-foreground">
-                <th className="pb-2">Team</th>
-                <th className="pb-2 w-12 text-center">Seed</th>
-                <th className="pb-2 w-12 text-center">Wins</th>
-                <th className="pb-2 w-12 text-right">Points</th>
-                <th className="pb-2 w-20 text-right">Player</th>
+                <th className="pb-2 pr-2 whitespace-nowrap">Team</th>
+                <th className="pb-2 pr-2 text-center whitespace-nowrap">Wins</th>
+                <th className="pb-2 pr-2 text-right whitespace-nowrap">Points</th>
+                <th className="pb-2 text-right whitespace-nowrap">Player</th>
               </tr>
             </thead>
             <tbody>
@@ -104,13 +103,10 @@ export function TeamList({
                   key={team.tournament_team_id}
                   className="border-t border-border"
                 >
-                  <td className="py-2 font-medium">{team.team_name}</td>
-                  <td className="py-2 text-center tabular-nums">{team.seed}</td>
-                  <td className="py-2 text-center tabular-nums">{team.wins}</td>
-                  <td className="py-2 text-right tabular-nums">
-                    {team.total_points}
-                  </td>
-                  <td className="py-2 text-right">
+                  <td className="py-2 pr-2 font-medium whitespace-nowrap">{team.team_name}</td>
+                  <td className="py-2 pr-2 text-center tabular-nums">{team.wins}</td>
+                  <td className="py-2 pr-2 text-right tabular-nums">{team.total_points}</td>
+                  <td className="py-2 text-right whitespace-nowrap">
                     {team.player_name ?? (
                       <span className="text-muted-foreground">Undrafted</span>
                     )}
