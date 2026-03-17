@@ -88,7 +88,7 @@ export function TeamList({
 
         {/* Team list table */}
         <div className="overflow-x-auto">
-          <table className="w-auto">
+          <table className="w-full max-w-xl">
             <thead>
               <tr className="text-left text-sm text-muted-foreground">
                 <th className="pb-2 pr-2 whitespace-nowrap">Team</th>
