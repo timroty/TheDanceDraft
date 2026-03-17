@@ -39,7 +39,7 @@ export async function ScoreTable({
   }
 
   return (
-    <Card className="border-none">
+    <Card className="max-w-xl border-none">
       <CardHeader>
         <CardTitle className="text-lg">Standings</CardTitle>
       </CardHeader>
