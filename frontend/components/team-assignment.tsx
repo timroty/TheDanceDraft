@@ -116,9 +116,7 @@ export function TeamAssignment({
 
   return (
     <div className="flex flex-col gap-6">
-
-      
-        <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2">
           <span className="text-sm text-muted-foreground mr-2 self-center">
             Unassigned:
           </span>
@@ -132,7 +130,6 @@ export function TeamAssignment({
             <span className="text-sm text-muted-foreground">None</span>
           )}
         </div>
-      
 
       <div className="flex flex-col gap-4">
         {players.map((player) => {

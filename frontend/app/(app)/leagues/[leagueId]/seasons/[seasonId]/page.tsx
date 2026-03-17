@@ -15,10 +15,6 @@ async function SeasonContent({
   const { leagueId, seasonId } = await params;
   const supabase = await createClient();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
   const { data: season } = await supabase
     .from("league_season")
     .select("id, tournament_id, tournament(year), league(commissioner_id, name)")
@@ -29,10 +25,6 @@ async function SeasonContent({
     (season?.league as unknown as { name: string })?.name ?? "League";
   const year =
     (season?.tournament as unknown as { year: number })?.year ?? "Season";
-  const commissionerId = (
-    season?.league as unknown as { commissioner_id: string }
-  )?.commissioner_id;
-  const isCommissioner = user?.id === commissionerId;
 
   // Fetch team list data
   const { data: tournamentTeams } = await supabase
