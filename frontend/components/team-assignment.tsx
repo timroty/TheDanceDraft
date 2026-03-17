@@ -28,11 +28,13 @@ export function TeamAssignment({
   teams,
   players,
   initialAssignments,
+  isCommissioner,
 }: {
   leagueSeasonId: string;
   teams: Team[];
   players: Player[];
   initialAssignments: Assignment[];
+  isCommissioner: boolean;
 }) {
   const supabase = createClient();
   const [assignments, setAssignments] = useState<Assignment[]>(initialAssignments);
@@ -114,7 +116,6 @@ export function TeamAssignment({
 
   return (
     <div className="flex flex-col gap-6">
-      <h2 className="text-lg font-semibold">Team Assignment</h2>
 
       
         <div className="flex flex-wrap gap-2">
@@ -140,62 +141,66 @@ export function TeamAssignment({
           const isOpen = openDropdown === player.id && filtered.length > 0;
 
           return (
-            <div key={player.id} className="flex flex-col gap-2">
-              <div className="font-medium">{player.name}</div>
-              <div className="flex flex-wrap gap-2">
+            <div key={player.id} className="flex flex-col gap-2 pb-4 border-b border-muted last:border-b-0">
+              <div className="text-sm font-medium text-muted-foreground">{player.name}</div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 {playerTeams.map(({ team, ...assignment }) => (
                   <Badge key={assignment.league_season_player_id}>
                     ({team.seed}) {team.team_name}
-                    <button
-                      className="ml-1 hover:text-destructive"
-                      onClick={() => handleRemove(assignment)}
-                    >
-                      &times;
-                    </button>
+                    {isCommissioner && (
+                      <button
+                        className="ml-1 hover:text-destructive"
+                        onClick={() => handleRemove(assignment)}
+                      >
+                        &times;
+                      </button>
+                    )}
                   </Badge>
                 ))}
               </div>
-              <div className="relative max-w-xs">
-                <Input
-                  placeholder="Search teams..."
-                  value={searchTerms[player.id] ?? ""}
-                  onChange={(e) => {
-                    setSearchTerms((prev) => ({
-                      ...prev,
-                      [player.id]: e.target.value,
-                    }));
-                    setOpenDropdown(player.id);
-                  }}
-                  onFocus={() => setOpenDropdown(player.id)}
-                  onBlur={() => {
-                    // Delay to allow click on dropdown item
-                    setTimeout(() => setOpenDropdown(null), 200);
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      e.preventDefault();
-                      const filtered = getFilteredTeams(player.id);
-                      if (filtered.length > 0) {
-                        handleAssign(player.id, filtered[0]);
+              {isCommissioner && (
+                <div className="relative max-w-xs">
+                  <Input
+                    placeholder="Search teams..."
+                    value={searchTerms[player.id] ?? ""}
+                    onChange={(e) => {
+                      setSearchTerms((prev) => ({
+                        ...prev,
+                        [player.id]: e.target.value,
+                      }));
+                      setOpenDropdown(player.id);
+                    }}
+                    onFocus={() => setOpenDropdown(player.id)}
+                    onBlur={() => {
+                      // Delay to allow click on dropdown item
+                      setTimeout(() => setOpenDropdown(null), 200);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        const filtered = getFilteredTeams(player.id);
+                        if (filtered.length > 0) {
+                          handleAssign(player.id, filtered[0]);
+                        }
                       }
-                    }
-                  }}
-                />
-                {isOpen && (
-                  <div className="absolute z-10 mt-1 w-full rounded-md border bg-popover shadow-md">
-                    {filtered.map((team) => (
-                      <button
-                        key={team.tournament_team_id}
-                        className="w-full px-3 py-2 text-left text-sm hover:bg-accent"
-                        onMouseDown={(e) => e.preventDefault()}
-                        onClick={() => handleAssign(player.id, team)}
-                      >
-                        ({team.seed}) {team.team_name}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
+                    }}
+                  />
+                  {isOpen && (
+                    <div className="absolute z-10 mt-1 w-full rounded-md border bg-popover shadow-md">
+                      {filtered.map((team) => (
+                        <button
+                          key={team.tournament_team_id}
+                          className="w-full px-3 py-2 text-left text-sm hover:bg-accent"
+                          onMouseDown={(e) => e.preventDefault()}
+                          onClick={() => handleAssign(player.id, team)}
+                        >
+                          ({team.seed}) {team.team_name}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           );
         })}

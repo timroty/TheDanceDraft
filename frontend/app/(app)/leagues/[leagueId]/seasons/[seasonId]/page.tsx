@@ -47,13 +47,11 @@ async function SeasonContent({
             <h2 className="text-lg text-muted-foreground">{year}</h2>
           </div>
         </div>
-        {isCommissioner && (
-          <Button asChild variant="ghost" size="icon">
-            <Link href={`/leagues/${leagueId}/seasons/${seasonId}/settings`}>
-              <Settings className="size-4" />
-            </Link>
-          </Button>
-        )}
+        <Button asChild variant="ghost" size="icon">
+          <Link href={`/leagues/${leagueId}/seasons/${seasonId}/settings`}>
+            <Settings className="size-4" />
+          </Link>
+        </Button>
       </div>
       <div className="ml-1">
         <ScoreTable leagueSeasonId={seasonId} />

@@ -14,9 +14,11 @@ type ScoringRow = {
 export function ScoringTable({
   leagueSeasonId,
   initialScoring,
+  isCommissioner,
 }: {
   leagueSeasonId: string;
   initialScoring: ScoringRow[];
+  isCommissioner: boolean;
 }) {
   const supabase = createClient();
   const [rows, setRows] = useState<ScoringRow[]>(() => {
@@ -49,7 +51,6 @@ export function ScoringTable({
 
   return (
     <div className="flex flex-col gap-4">
-      <h2 className="text-lg font-semibold">Scoring Configuration</h2>
       <table className="w-full max-w-xs">
         <thead>
           <tr className="text-left text-sm text-muted-foreground">
@@ -65,6 +66,7 @@ export function ScoringTable({
                 <Input
                   type="number"
                   min={0}
+                  disabled={!isCommissioner}
                   value={row.points}
                   onChange={(e) => {
                     const points = parseInt(e.target.value) || 0;
@@ -79,9 +81,11 @@ export function ScoringTable({
           ))}
         </tbody>
       </table>
-      <Button onClick={handleSave} disabled={saving} className="w-fit">
-        {saving ? "Saving..." : "Save Scoring"}
-      </Button>
+      {isCommissioner && (
+        <Button onClick={handleSave} disabled={saving} className="w-fit">
+          {saving ? "Saving..." : "Save Scoring"}
+        </Button>
+      )}
     </div>
   );
 }

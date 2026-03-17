@@ -27,9 +27,11 @@ async function SettingsContent({
     .eq("id", leagueId)
     .single();
 
-  if (!league || league.commissioner_id !== user?.id) {
-    redirect(`/leagues/${leagueId}/seasons/${seasonId}`);
+  if (!league) {
+    redirect(`/leagues/${leagueId}`);
   }
+
+  const isCommissioner = league.commissioner_id === user?.id;
 
   // Fetch season's tournament_id
   const { data: season } = await supabase
@@ -108,14 +110,14 @@ async function SettingsContent({
             teams={teams}
             players={players}
             initialAssignments={initialAssignments}
-            isCommissioner={true}
+            isCommissioner={isCommissioner}
           />
         }
         scoringContent={
           <ScoringTable
             leagueSeasonId={seasonId}
             initialScoring={initialScoring}
-            isCommissioner={true}
+            isCommissioner={isCommissioner}
           />
         }
       />
