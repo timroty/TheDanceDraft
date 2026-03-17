@@ -1,8 +1,10 @@
 import { Bracket } from "@/components/bracket";
 import { ScoreTable } from "@/components/score-table";
+import { TeamList } from "@/components/team-list";
 import { Button } from "@/components/ui/button";
+import { fetchTeamListData } from "@/lib/team-list-data";
 import { createClient } from "@/lib/supabase/server";
-import { Settings } from "lucide-react";
+import { ArrowLeft, Settings } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 
@@ -14,10 +16,6 @@ async function SeasonContent({
   const { leagueId, seasonId } = await params;
   const supabase = await createClient();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
   const { data: season } = await supabase
     .from("league_season")
     .select("id, tournament_id, tournament(year), league(commissioner_id, name)")
@@ -28,28 +26,37 @@ async function SeasonContent({
     (season?.league as unknown as { name: string })?.name ?? "League";
   const year =
     (season?.tournament as unknown as { year: number })?.year ?? "Season";
-  const commissionerId = (
-    season?.league as unknown as { commissioner_id: string }
-  )?.commissioner_id;
-  const isCommissioner = user?.id === commissionerId;
+
+  // Fetch team list data
+  const { teamListData, playersForFilter } = season?.tournament_id
+    ? await fetchTeamListData(supabase, season.tournament_id, seasonId)
+    : { teamListData: [], playersForFilter: [] };
 
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">{leagueName}</h1>
-          <h2 className="text-lg text-muted-foreground">{year}</h2>
-        </div>
-        {isCommissioner && (
-          <Button asChild variant="ghost" size="icon">
-            <Link href={`/leagues/${leagueId}/seasons/${seasonId}/settings`}>
-              <Settings className="size-4" />
+        <div className="flex items-center gap-4">
+          <Button variant="ghost" size="icon" asChild>
+            <Link href={`/leagues/${leagueId}`}>
+              <ArrowLeft className="size-5" />
             </Link>
           </Button>
-        )}
+          <div>
+            <h1 className="text-2xl font-bold">{leagueName}</h1>
+            <h2 className="text-lg text-muted-foreground">{year}</h2>
+          </div>
+        </div>
+        <Button asChild variant="ghost" size="icon">
+          <Link href={`/leagues/${leagueId}/seasons/${seasonId}/settings`}>
+            <Settings className="size-4" />
+          </Link>
+        </Button>
       </div>
-      <div className="ml-1">
-        <ScoreTable leagueSeasonId={seasonId} />
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr] gap-6">
+        <div className="ml-1">
+          <ScoreTable leagueSeasonId={seasonId} />
+        </div>
+        <TeamList teams={teamListData} players={playersForFilter} />
       </div>
       {season?.tournament_id && (
         <Bracket leagueSeasonId={seasonId} tournamentId={season.tournament_id} />

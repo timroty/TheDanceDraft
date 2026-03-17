@@ -20,13 +20,13 @@ export async function Bracket({
   }
 
   return (
-    <>
+    <div className="flex flex-col gap-4">
       <div className="hidden md:block">
         <BracketDesktop bracket={bracket} />
       </div>
       <div className="block md:hidden">
         <BracketMobile bracket={bracket} />
       </div>
-    </>
+    </div>
   );
 }

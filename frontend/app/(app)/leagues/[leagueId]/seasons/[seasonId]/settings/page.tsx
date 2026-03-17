@@ -1,4 +1,5 @@
 import { ScoringTable } from "@/components/scoring-table";
+import { SettingsTabs } from "@/components/settings-tabs";
 import { TeamAssignment } from "@/components/team-assignment";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
@@ -26,9 +27,11 @@ async function SettingsContent({
     .eq("id", leagueId)
     .single();
 
-  if (!league || league.commissioner_id !== user?.id) {
-    redirect(`/leagues/${leagueId}/seasons/${seasonId}`);
+  if (!league) {
+    redirect(`/leagues/${leagueId}`);
   }
+
+  const isCommissioner = league.commissioner_id === user?.id;
 
   // Fetch season's tournament_id
   const { data: season } = await supabase
@@ -91,7 +94,7 @@ async function SettingsContent({
   }));
 
   return (
-    <div className="flex flex-col gap-10">
+    <div className="flex flex-col gap-6">
       <div className="flex items-center gap-4">
         <Button variant="ghost" size="icon" asChild>
           <Link href={`/leagues/${leagueId}/seasons/${seasonId}`}>
@@ -100,15 +103,23 @@ async function SettingsContent({
         </Button>
         <h1 className="text-2xl font-bold">Season Settings</h1>
       </div>
-      <TeamAssignment
-        leagueSeasonId={seasonId}
-        teams={teams}
-        players={players}
-        initialAssignments={initialAssignments}
-      />
-      <ScoringTable
-        leagueSeasonId={seasonId}
-        initialScoring={initialScoring}
+      <SettingsTabs
+        teamsContent={
+          <TeamAssignment
+            leagueSeasonId={seasonId}
+            teams={teams}
+            players={players}
+            initialAssignments={initialAssignments}
+            isCommissioner={isCommissioner}
+          />
+        }
+        scoringContent={
+          <ScoringTable
+            leagueSeasonId={seasonId}
+            initialScoring={initialScoring}
+            isCommissioner={isCommissioner}
+          />
+        }
       />
     </div>
   );

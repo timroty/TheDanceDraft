@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Menu, Sun, Moon, Laptop } from "lucide-react";
+import { Menu, Sun, Moon, Laptop, Home } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -51,6 +51,17 @@ export function NavMenu({ isAuthenticated }: NavMenuProps) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
+        {isAuthenticated && (
+          <>
+            <DropdownMenuItem asChild>
+              <Link href="/home" className="flex w-full items-center gap-2 cursor-pointer">
+                <Home size={16} className="text-muted-foreground" />
+                <span>Home</span>
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+          </>
+        )}
         <DropdownMenuItem asChild>
           <button
             onClick={cycleTheme}

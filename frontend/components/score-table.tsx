@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 type Standing = {
   league_player_id: string;
@@ -26,14 +27,24 @@ export async function ScoreTable({
 
   if (!standings || standings.length === 0) {
     return (
-      <p className="text-sm text-muted-foreground">No standings available.</p>
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg">Standings</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-muted-foreground">No standings available.</p>
+        </CardContent>
+      </Card>
     );
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      <h2 className="text-lg font-semibold">Standings</h2>
-      <table className="w-full max-w-xl">
+    <Card className="max-w-xl border-none">
+      <CardHeader>
+        <CardTitle className="text-lg">Standings</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <table className="w-full max-w-xl">
         <thead>
           <tr className="text-left text-sm text-muted-foreground">
             <th className="pb-2 w-16">#</th>
@@ -73,7 +84,8 @@ export async function ScoreTable({
             </tr>
           ))}
         </tbody>
-      </table>
-    </div>
+        </table>
+      </CardContent>
+    </Card>
   );
 }

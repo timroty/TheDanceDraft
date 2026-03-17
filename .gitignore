@@ -1,5 +1,8 @@
 # Claude Code local settings
 .claude/
 
+# Worktrees
+.worktrees/
+
 # macOS
 .DS_Store
