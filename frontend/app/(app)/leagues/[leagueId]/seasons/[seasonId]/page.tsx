@@ -2,7 +2,7 @@ import { Bracket } from "@/components/bracket";
 import { ScoreTable } from "@/components/score-table";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
-import { Settings } from "lucide-react";
+import { ArrowLeft, Settings } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 
@@ -36,9 +36,16 @@ async function SeasonContent({
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">{leagueName}</h1>
-          <h2 className="text-lg text-muted-foreground">{year}</h2>
+        <div className="flex items-center gap-4">
+          <Button variant="ghost" size="icon" asChild>
+            <Link href={`/leagues/${leagueId}`}>
+              <ArrowLeft className="size-5" />
+            </Link>
+          </Button>
+          <div>
+            <h1 className="text-2xl font-bold">{leagueName}</h1>
+            <h2 className="text-lg text-muted-foreground">{year}</h2>
+          </div>
         </div>
         {isCommissioner && (
           <Button asChild variant="ghost" size="icon">
