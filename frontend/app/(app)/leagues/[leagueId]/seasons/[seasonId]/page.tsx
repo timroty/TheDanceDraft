@@ -2,6 +2,7 @@ import { Bracket } from "@/components/bracket";
 import { ScoreTable } from "@/components/score-table";
 import { TeamList } from "@/components/team-list";
 import { Button } from "@/components/ui/button";
+import { fetchTeamListData } from "@/lib/team-list-data";
 import { createClient } from "@/lib/supabase/server";
 import { ArrowLeft, Settings } from "lucide-react";
 import Link from "next/link";
@@ -27,66 +28,9 @@ async function SeasonContent({
     (season?.tournament as unknown as { year: number })?.year ?? "Season";
 
   // Fetch team list data
-  const { data: tournamentTeams } = await supabase
-    .from("tournament_team")
-    .select("id, seed, team(name)")
-    .eq("tournament_id", season?.tournament_id)
-    .order("seed");
-
-  const tournamentTeamIds = (tournamentTeams ?? []).map((tt) => tt.id);
-  const { data: teamWins } = await supabase
-    .from("tournament_team_wins")
-    .select("tournament_team_id, wins")
-    .in("tournament_team_id", tournamentTeamIds);
-
-  const { data: assignments } = await supabase
-    .from("league_season_player")
-    .select("tournament_team_id, league_player:league_player_id(id, name, profile_pic)")
-    .eq("league_season_id", seasonId);
-
-  const { data: scoring } = await supabase
-    .from("league_season_scoring")
-    .select("seed, points")
-    .eq("league_season_id", seasonId);
-
-  // Build team list data
-  const winsMap = new Map(
-    (teamWins ?? []).map((w) => [w.tournament_team_id, Number(w.wins)])
-  );
-  const scoringMap = new Map(
-    (scoring ?? []).map((s) => [s.seed, s.points])
-  );
-  const assignmentMap = new Map(
-    (assignments ?? []).map((a) => [
-      a.tournament_team_id,
-      a.league_player as unknown as { id: string; name: string; profile_pic: string | null },
-    ])
-  );
-
-  const teamListData = (tournamentTeams ?? []).map((tt) => {
-    const wins = winsMap.get(tt.id) ?? 0;
-    const pointsPerWin = scoringMap.get(tt.seed) ?? 0;
-    const player = assignmentMap.get(tt.id);
-    return {
-      tournament_team_id: tt.id,
-      team_name: (tt.team as unknown as { name: string })?.name ?? "Unknown",
-      seed: tt.seed,
-      wins,
-      total_points: wins * pointsPerWin,
-      player_name: player?.name ?? null,
-      player_id: player?.id ?? null,
-    };
-  });
-
-  // Build unique players list for filter badges (sorted alphabetically)
-  const playersForFilter = Array.from(
-    new Map(
-      (assignments ?? [])
-        .map((a) => a.league_player as unknown as { id: string; name: string })
-        .filter(Boolean)
-        .map((p) => [p.id, p])
-    ).values()
-  ).sort((a, b) => a.name.localeCompare(b.name));
+  const { teamListData, playersForFilter } = season?.tournament_id
+    ? await fetchTeamListData(supabase, season.tournament_id, seasonId)
+    : { teamListData: [], playersForFilter: [] };
 
   return (
     <div className="flex flex-col gap-6">

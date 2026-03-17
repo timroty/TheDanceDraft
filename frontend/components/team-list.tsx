@@ -60,7 +60,7 @@ export function TeamList({
   });
 
   return (
-    <Card className="max-w-xl border-none">
+    <Card className="border-none">
       <CardHeader>
         <CardTitle className="text-lg">Teams</CardTitle>
       </CardHeader>
@@ -87,37 +87,39 @@ export function TeamList({
         </div>
 
         {/* Team list table */}
-        <table className="w-full">
-          <thead>
-            <tr className="text-left text-sm text-muted-foreground">
-              <th className="pb-2">Team</th>
-              <th className="pb-2 w-16 text-center">Seed</th>
-              <th className="pb-2 w-16 text-center">Wins</th>
-              <th className="pb-2 w-20 text-right">Points</th>
-              <th className="pb-2 text-right">Player</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sortedTeams.map((team) => (
-              <tr
-                key={team.tournament_team_id}
-                className="border-t border-border"
-              >
-                <td className="py-2 font-medium">{team.team_name}</td>
-                <td className="py-2 text-center tabular-nums">{team.seed}</td>
-                <td className="py-2 text-center tabular-nums">{team.wins}</td>
-                <td className="py-2 text-right tabular-nums">
-                  {team.total_points}
-                </td>
-                <td className="py-2 text-right">
-                  {team.player_name ?? (
-                    <span className="text-muted-foreground">Undrafted</span>
-                  )}
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[360px]">
+            <thead>
+              <tr className="text-left text-sm text-muted-foreground">
+                <th className="pb-2">Team</th>
+                <th className="pb-2 w-12 text-center">Seed</th>
+                <th className="pb-2 w-12 text-center">Wins</th>
+                <th className="pb-2 w-12 text-right">Points</th>
+                <th className="pb-2 w-20 text-right">Player</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {sortedTeams.map((team) => (
+                <tr
+                  key={team.tournament_team_id}
+                  className="border-t border-border"
+                >
+                  <td className="py-2 font-medium">{team.team_name}</td>
+                  <td className="py-2 text-center tabular-nums">{team.seed}</td>
+                  <td className="py-2 text-center tabular-nums">{team.wins}</td>
+                  <td className="py-2 text-right tabular-nums">
+                    {team.total_points}
+                  </td>
+                  <td className="py-2 text-right">
+                    {team.player_name ?? (
+                      <span className="text-muted-foreground">Undrafted</span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </CardContent>
     </Card>
   );

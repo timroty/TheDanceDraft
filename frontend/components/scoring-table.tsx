@@ -64,6 +64,7 @@ export function ScoringTable({
               <td className="py-1 pr-4 font-medium">{row.seed}</td>
               <td className="py-1">
                 <Input
+                  type="number"
                   min={0}
                   disabled={!isCommissioner}
                   value={row.points}
