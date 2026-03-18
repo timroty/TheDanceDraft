@@ -93,7 +93,7 @@ async function LeagueContent({
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">{league?.name ?? "League"}</h1>
         {leaguePlayer && (
-          <Button asChild variant="ghost" size="icon">
+          <Button asChild variant="ghost" size="icon" aria-label="Player settings">
             <Link href={`/leagues/${leagueId}/settings`}>
               <Settings className="size-4" />
             </Link>

@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
 type LeaguePlayer = {
@@ -22,7 +22,7 @@ export function LeaguePlayerSettingsForm({
 }: {
   leaguePlayer: LeaguePlayer;
 }) {
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
   const router = useRouter();
 
   const [name, setName] = useState(leaguePlayer.name);
