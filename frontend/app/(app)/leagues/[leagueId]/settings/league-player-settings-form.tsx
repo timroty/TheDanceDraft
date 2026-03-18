@@ -139,6 +139,18 @@ export function LeaguePlayerSettingsForm({
 
       <div className="flex flex-col gap-2">
         <Label htmlFor="profile-pic">Profile picture</Label>
+        {leaguePlayer.profile_pic ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={leaguePlayer.profile_pic}
+            alt="Current profile picture"
+            className="size-20 rounded-full object-cover"
+          />
+        ) : (
+          <div className="size-20 rounded-full bg-muted flex items-center justify-center text-muted-foreground text-xs">
+            No photo
+          </div>
+        )}
         <Input
           id="profile-pic"
           type="file"

@@ -33,3 +33,17 @@ using (
     where league_player.user_id = auth.uid()
   )
 );
+
+-- Allow authenticated users to SELECT objects in their own league-player folder.
+create policy "league_player_storage_select"
+on storage.objects for select
+to authenticated
+using (
+  bucket_id = 'TheDanceDraft'
+  and (storage.foldername(name))[1] = 'league-players'
+  and (storage.foldername(name))[2] in (
+    select (league_player.id)::text as id
+    from league_player
+    where league_player.user_id = auth.uid()
+  )
+);
