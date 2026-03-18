@@ -4,10 +4,9 @@ import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
+import { Suspense } from "react";
 
-export const dynamic = "force-dynamic";
-
-export default async function LeaguePlayerSettingsPage({
+async function LeaguePlayerSettingsContent({
   params,
 }: {
   params: Promise<{ leagueId: string }>;
@@ -46,5 +45,17 @@ export default async function LeaguePlayerSettingsPage({
       </div>
       <LeaguePlayerSettingsForm leaguePlayer={leaguePlayer} />
     </div>
+  );
+}
+
+export default function LeaguePlayerSettingsPage({
+  params,
+}: {
+  params: Promise<{ leagueId: string }>;
+}) {
+  return (
+    <Suspense>
+      <LeaguePlayerSettingsContent params={params} />
+    </Suspense>
   );
 }
