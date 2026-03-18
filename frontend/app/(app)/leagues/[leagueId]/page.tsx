@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Settings } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 
@@ -90,7 +90,16 @@ async function LeagueContent({
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-2xl font-bold">{league?.name ?? "League"}</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold">{league?.name ?? "League"}</h1>
+        {leaguePlayer && (
+          <Button asChild variant="ghost" size="icon" aria-label="Player settings">
+            <Link href={`/leagues/${leagueId}/settings`}>
+              <Settings className="size-4" />
+            </Link>
+          </Button>
+        )}
+      </div>
       {!seasons || seasons.length === 0 ? (
         <p className="text-muted-foreground">No seasons yet.</p>
       ) : (
