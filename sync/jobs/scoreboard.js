@@ -58,8 +58,8 @@ async function processCompetition(comp) {
     return;
   }
 
-  // Step 5: Advance bracket for newly finished, unprocessed games.
-  if (!game.processed && comp.statusId === '3') {
+  // Step 5: Advance bracket for newly finished, unprocessed games. Status 3 = Final.
+  if (!game.processed && comp.statusId === 3) {
     await advanceBracket(game, homeScore, awayScore, home_team_id, away_team_id);
   }
 }
