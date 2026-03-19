@@ -59,7 +59,7 @@ async function processCompetition(comp) {
   }
 
   // Step 5: Advance bracket for newly finished, unprocessed games.
-  if (!game.processed) {
+  if (!game.processed && comp.statusId === '3') {
     await advanceBracket(game, homeScore, awayScore, home_team_id, away_team_id);
   }
 }
