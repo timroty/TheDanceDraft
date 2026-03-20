@@ -83,9 +83,16 @@ function isTeamWinner(game: GameData, team: "home" | "away"): boolean {
 export function GameCard({ game, className }: { game: GameData; className?: string }) {
   const showScore = game.status >= 2;
   const gameFinished = game.status === 3;
+  const isInProgress = game.status !== 1 && game.status !== 3;
 
   return (
-    <div className={cn("rounded border border-border bg-card text-card-foreground shadow-sm", className ?? "w-52")}>
+    <div className={cn(
+      "rounded border border-border bg-card text-card-foreground",
+      isInProgress
+        ? "shadow-[0_0_8px_rgba(239,68,68,0.5)]"
+        : "shadow-sm",
+      className ?? "w-52"
+    )}>
       <TeamRow
         team={game.homeTeam}
         isWinner={isTeamWinner(game, "home")}
@@ -100,7 +107,7 @@ export function GameCard({ game, className }: { game: GameData; className?: stri
         showPoints={gameFinished ? isTeamWinner(game, "away") : true}
       />
       {game.detail && (
-        <div className="border-t border-border px-2 py-0.5 text-center text-[10px] text-muted-foreground">
+        <div className={cn("border-t border-border px-2 py-0.5 text-center text-[10px]", isInProgress ? "text-rose-500" : "text-muted-foreground")}>
           {game.detail}
         </div>
       )}
